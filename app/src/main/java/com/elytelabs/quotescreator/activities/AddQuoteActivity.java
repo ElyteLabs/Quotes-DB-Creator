@@ -37,9 +37,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         // Get clipboard data and set it to edit text
         String pasteData = Helper.getClipboardData(this);
-        edtquote.setOnClickListener(view -> {
-            edtquote.setText(pasteData);
-        });
+        edtquote.setOnClickListener(view -> edtquote.setText(pasteData));
 
         buttonSaveQuote.setOnClickListener(v -> {
 
