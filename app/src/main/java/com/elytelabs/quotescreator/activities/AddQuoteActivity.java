@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.elytelabs.quotescreator.R;
 import com.elytelabs.quotescreator.database.DatabaseHelper;
+import com.elytelabs.quotescreator.utils.Helper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -33,6 +34,13 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         edtquote = findViewById(R.id.editTextAddQuote);
         buttonSaveQuote = findViewById(R.id.buttonSaveQuote);
+
+        // Get clipboard data and set it to edit text
+        String pasteData = Helper.getClipboardData(this);
+        edtquote.setOnClickListener(view -> {
+            edtquote.setText(pasteData);
+        });
+
         buttonSaveQuote.setOnClickListener(v -> {
 
             String quote = edtquote.getText().toString().trim();
