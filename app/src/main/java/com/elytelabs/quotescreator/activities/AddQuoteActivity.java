@@ -2,6 +2,7 @@ package com.elytelabs.quotescreator.activities;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
@@ -21,7 +22,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     EditText edtquote;
     FloatingActionButton buttonSaveQuote;
     DatabaseHelper mDBHelper;
-
+    boolean isAutoPasteEnabled;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +32,16 @@ public class AddQuoteActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add Quote");
 
         mDBHelper = new DatabaseHelper(this);
+        isAutoPasteEnabled = Helper.isAutoPasteEnabled(this);
 
         edtquote = findViewById(R.id.editTextAddQuote);
         buttonSaveQuote = findViewById(R.id.buttonSaveQuote);
 
-        // Get clipboard data and set it to edit text
-        String pasteData = Helper.getClipboardData(this);
-        edtquote.setOnClickListener(view -> edtquote.setText(pasteData));
+        if (isAutoPasteEnabled) {
+            // Get clipboard data and set it to edit text
+            String pasteData = Helper.getClipboardData(this);
+            edtquote.setOnClickListener(view -> edtquote.setText(pasteData));
+        }
 
         buttonSaveQuote.setOnClickListener(v -> {
 
@@ -67,12 +71,44 @@ public class AddQuoteActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_quote, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_auto_paste);
+        if (isAutoPasteEnabled) {
+
+            menuItem.setChecked(false);
+            menuItem.setTitle(R.string.disable_auto_paste);
+        } else {
+
+            menuItem.setChecked(true);
+            menuItem.setTitle(R.string.enable_auto_paste);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
+
         // Android default back button
         if (id == android.R.id.home) {
             onBackPressed();
+            return true;
+
+        }
+        if (id == R.id.action_auto_paste) {
+            if (isAutoPasteEnabled) {
+
+                //item.setChecked(false);
+                item.setTitle(R.string.disable_auto_paste);
+                Helper.setAutoPasteEnabled(this, false);
+            } else {
+
+                //  item.setChecked(true);
+                item.setTitle(R.string.enable_auto_paste);
+                Helper.setAutoPasteEnabled(this, true);
+            }
             return true;
 
 

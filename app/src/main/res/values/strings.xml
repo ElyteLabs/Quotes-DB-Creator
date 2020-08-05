@@ -3,4 +3,6 @@
     <string name="quote">Quote</string>
     <string name="backup">Backup</string>
     <string name="delete">Delete</string>
+    <string name="enable_auto_paste">Enable Auto Paste</string>
+    <string name="disable_auto_paste">Disable Auto Paste</string>
 </resources>
